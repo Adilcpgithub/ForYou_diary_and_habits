@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:for_you/database/db_functions.dart';
-import 'package:for_you/screen/Infopages.dart';
-import 'package:for_you/screen/diary_page/entry_list.dart';
+import 'package:for_you/database/db_user_functions.dart';
+import 'package:for_you/database/dp_f_diary_entry.dart';
+import 'package:for_you/database/habit_db.dart';
+import 'package:for_you/screen/infopages.dart';
+import 'package:for_you/screen/button_bar/button_bar_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,10 +13,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String? keyIns = currentUserKey;
   @override
   void initState() {
     //  gotoInfopage();
+    initializeCurrentUser();
+    initialiseHabit();
+    // print("cccccccc${currentUserKey}");
     gotoNextPage();
+    // loadAllDataWithkey();
     super.initState();
   }
 
@@ -31,15 +38,16 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               "FOR YOU",
               style: TextStyle(
-                  fontSize: 60, fontFamily: 'Monoton', color: Colors.green),
+                  fontSize: 60, fontFamily: 'Monoton', color: Colors.blue[300]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 70,
             ),
             Image.asset(
               'assets/images/Newbook(foryou).png',
               height: 120,
               width: 120,
+              color: Colors.blue[300],
             )
           ],
         ),
@@ -49,32 +57,51 @@ class _SplashScreenState extends State<SplashScreen> {
 
   gotoInfopage() async {
     await Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
     );
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-      return PageOne();
+      return const PageOne();
     }), (route) => false);
   }
 
   gotoDemoPage() async {
     await Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 5),
     );
+    // await getAllEntries(currentUserKey!);
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-      return EntryList();
+      return MyHomePage(
+        selectedIndex: 0,
+      );
     }), (route) => false);
   }
 
   gotoNextPage() async {
-    bool? isLogin = await CheckLogin();
+    bool? isLogin = await checkLogin();
     Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 5),
     );
+    //  await getAllEntries(currentUserKey!);
 
-    if (isLogin == true) {
+    if (isLogin == true || isLogin == null) {
       gotoDemoPage();
     } else {
       gotoInfopage();
     }
+  }
+
+  loadAllDataWithkey() async {
+    await getAllEntries(currentUserKey!);
+  }
+
+  initializeCurrentUser() async {
+    await getCurrentUserKey();
+  }
+
+  initialiseHabit() async {
+    HabitDBFunctions obj = HabitDBFunctions();
+    await obj.getHabbit();
   }
 }

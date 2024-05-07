@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:for_you/models/diary_model.dart';
 import 'package:for_you/screen/diary_page/edit.diary.dart';
+import 'package:for_you/widget/textfont_model.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class ReadDiaryPage extends StatefulWidget {
@@ -27,11 +29,9 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
   File? _image;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     entry = widget.entry;
 
-    print(" image = ${entry.imagePath}");
     if (entry.imagePath != null) {
       _loadImage(entry.imagePath!);
     }
@@ -41,7 +41,12 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Diary Entry'),
+        title: Text(
+          'Diary Entry',
+          style: TextStyle(
+            fontFamily: Textfonts.ConformityPersonalUseRegular,
+          ),
+        ),
         centerTitle: true,
         actions: [
           Padding(
@@ -72,7 +77,7 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: Card(
-              color: const Color.fromARGB(255, 227, 230, 235),
+              color: Colors.blue[50],
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -90,17 +95,15 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
                           child: Column(
                             children: [
                               Text(
-                                '${widget.entry.date.day}/${widget.entry.date.month}/${widget.entry.date.year}',
+                                DateFormat('MMMM dd,yyyy').format(entry.date),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                  'Time : ${widget.entry.date.hour}:${widget.entry.date.minute} ')
                             ],
                           ),
                         ),
@@ -117,8 +120,9 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
                               padding: const EdgeInsets.all(15.0),
                               child: Text(
                                 widget.entry.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 24,
+                                  fontFamily: Textfonts.MiseryRegular,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -131,10 +135,10 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
                         ? Center(
                             child: Container(
                               width: 350,
-                              height: 300,
+                              height: 250,
                               decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
+                                    const BorderRadius.all(Radius.circular(15)),
                                 image: DecorationImage(
                                   image: FileImage(_image!),
                                   fit: BoxFit.cover,
@@ -148,7 +152,10 @@ class _ReadDiaryPageState extends State<ReadDiaryPage> {
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
                         widget.entry.content,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ],
@@ -179,6 +186,5 @@ Future gotoEditPage(ctx, DiaryEntry entry, index) async {
     ),
   ).then((value) {
     entry = value;
-    print(entry.title);
   });
 }

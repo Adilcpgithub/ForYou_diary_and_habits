@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:for_you/database/db_functions.dart';
-import 'package:for_you/screen/diary_page/entry_list.dart';
+import 'package:for_you/database/db_user_functions.dart';
+import 'package:for_you/screen/button_bar/button_bar_home.dart';
 import 'package:for_you/screen/register_page.dart';
 import 'package:for_you/widget/Colors_SnackBar.dart';
 import 'package:for_you/widget/textfont_model.dart';
@@ -26,18 +26,19 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 200,
               ),
-              Container(
+              SizedBox(
                 height: 100,
                 width: 100,
                 child: Image.asset(
                   'assets/images/Newbook(foryou).png',
                   fit: BoxFit.cover,
+                  color: Colors.blue[300],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
               Padding(
@@ -50,19 +51,18 @@ class _LoginPageState extends State<LoginPage> {
                       hintText: '  Enter UserName',
                       borderRadius: 30,
                       errorText: "UserName Can't be null",
-                      color: AppColors.modelColor2,
+                      color: const Color.fromARGB(255, 153, 206, 250),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     TextformfeildModel(
-                      keyboardType: TextInputType.number,
                       validator: checkPassword,
                       controller: passwordController,
                       hintText: '  EnterPassword',
                       borderRadius: 30,
                       errorText: "Password Can't be null",
-                      color: AppColors.modelColor2,
+                      color: const Color.fromARGB(255, 153, 206, 250),
                     ),
                     const SizedBox(
                       height: 10,
@@ -76,6 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                               passwordController.text = '';
                             });
                           },
+                          style: TextButton.styleFrom(
+                              backgroundColor: AppColors.modelwhite,
+                              minimumSize: const Size(150, 50)),
                           child: Text(
                             'clear data',
                             style: TextStyle(
@@ -83,13 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                                 fontFamily: Textfonts.MiseryRegular,
                                 fontSize: 15),
                           ),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppColors.modelwhite,
-                              minimumSize: Size(150, 50)),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     TextButton(
@@ -98,29 +98,11 @@ class _LoginPageState extends State<LoginPage> {
                           checkUser = userController.text.isEmpty;
                           checkPassword = passwordController.text.isEmpty;
                         });
-                        if (userController.text.length >= 4) {
-                          if (passwordController.text.length >= 6) {
-                            //////////
-                            var login = await validateUserData(
-                                userController.text, passwordController.text);
-                            print(login);
-
-                            if (login == true) {
-                              setCheckLogin(true);
-                              GotoDd(context);
-                            } else {
-                              showSnackBar(context, 'Wrong entry', Colors.red);
-                            }
-                            /////
-                          } else {
-                            showSnackBar(context, 'password Should be 6 Number',
-                                Colors.red);
-                          }
-                        } else {
-                          showSnackBar(context,
-                              'usesname Should be 4 character', Colors.red);
-                        }
+                        login(userController.text, passwordController.text);
                       },
+                      style: TextButton.styleFrom(
+                          backgroundColor: AppColors.modelColor1,
+                          minimumSize: const Size(150, 50)),
                       child: Text(
                         'Login',
                         style: TextStyle(
@@ -128,20 +110,17 @@ class _LoginPageState extends State<LoginPage> {
                             fontFamily: Textfonts.MiseryRegular,
                             fontSize: 20),
                       ),
-                      style: TextButton.styleFrom(
-                          backgroundColor: AppColors.modelColor1,
-                          minimumSize: Size(150, 50)),
                     ),
 //////////////////////////////////////////////////////
 
                     //////////////////////////////////////////////////////////////////// //////
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     GestureDetector(
                         onTap: () => GotoSignPage(context),
-                        child: Text('Register')),
-                    SizedBox(
+                        child: const Text('Register')),
+                    const SizedBox(
                       height: 20,
                     ),
                   ],
@@ -153,18 +132,61 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  bool isValidUsername(String username) {
+    final RegExp usernameRegExp = RegExp(r'^[a-zA-Z0-9_]+$');
+    return usernameRegExp.hasMatch(username);
+  }
+
+  bool isValidPassword(String password) {
+    final RegExp passwordRegExp =
+        RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$');
+    return passwordRegExp.hasMatch(password);
+  }
+
+  void login(String username, String password) async {
+    if (isValidUsername(username)) {
+      if (isValidPassword(password)) {
+        bool loginSuccess = await validateUserData(username, password);
+        if (!loginSuccess) {
+          // ignore: use_build_context_synchronously
+          showSnackBar(context, 'Wrong username or password', Colors.red);
+        } else {
+          setCheckLogin(true);
+
+          await getCurrentUserKey();
+
+          saveCurrentUserKey(currentUser.key.toString());
+          // ignore: use_build_context_synchronously
+          GotoDd(context);
+        }
+      } else {
+        showSnackBar(
+            context,
+            'Password should be at least 6 characters long and contain at least one letter and one digit',
+            Colors.red);
+      }
+    } else {
+      showSnackBar(
+          context,
+          'Username should contain only alphanumeric characters and underscores',
+          Colors.red);
+    }
+  }
 }
 
+// ignore: non_constant_identifier_names
 GotoSignPage(ctx) {
   Navigator.of(ctx).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-    return Sign_In();
-    ////chane page route name/////
+    return const Sign_In();
   }), (route) => false);
 }
 
+// ignore: non_constant_identifier_names
 GotoDd(ctx) {
   Navigator.of(ctx).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-    return EntryList();
-    ////chane page route name/////
+    return MyHomePage(
+      selectedIndex: 0,
+    );
   }), (route) => false);
 }

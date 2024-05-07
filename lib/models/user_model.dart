@@ -7,5 +7,13 @@ class User extends HiveObject {
   late String username;
   @HiveField(1)
   late String password;
-  User(this.username, this.password);
+  @HiveField(2)
+  late String? name;
+  @HiveField(3)
+  late String? imageData;
+  User(
+      {required this.username,
+      required this.password,
+      this.name,
+      this.imageData});
 }

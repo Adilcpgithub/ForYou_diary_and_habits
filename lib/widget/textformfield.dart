@@ -13,7 +13,7 @@ class TextformfeildModel extends StatefulWidget {
   final Color color;
 
   TextformfeildModel(
-      {Key? key,
+      {super.key,
       this.obscureText = false,
       this.controller,
       this.keyboardType,
@@ -22,8 +22,7 @@ class TextformfeildModel extends StatefulWidget {
       this.validator,
       required this.hintText,
       required this.borderRadius,
-      required this.color})
-      : super(key: key);
+      required this.color});
 
   @override
   State<TextformfeildModel> createState() => _TextformfeildModelState();

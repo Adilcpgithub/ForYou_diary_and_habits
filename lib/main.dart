@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_you/models/diary_model.dart';
+import 'package:for_you/models/habit_model.dart';
 import 'package:for_you/models/user_model.dart';
 import 'package:for_you/screen/splash_screen.dart';
 import 'package:hive/hive.dart';
@@ -12,9 +13,11 @@ Future<void> main() async {
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(DiaryEntryAdapter());
+  Hive.registerAdapter(HabitModelAdapter());
+
   await Hive.openBox<DiaryEntry>('diary_entries');
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,6 +30,6 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen());
+        home: const SplashScreen());
   }
 }

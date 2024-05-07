@@ -1,10 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:for_you/screen/loginpage.dart';
+import 'package:for_you/screen/register_page.dart';
 import 'package:for_you/widget/Colors_SnackBar.dart';
 import 'package:for_you/widget/textfont_model.dart';
 
-////////////////////////// first information page//////////////////////////////////////////////
 class PageOne extends StatefulWidget {
   const PageOne({super.key});
 
@@ -15,15 +16,12 @@ class PageOne extends StatefulWidget {
 class _PageOneState extends State<PageOne> {
   var currentIndux = 0;
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  void initState() => super.initState();
 
   @override
   Widget build(BuildContext context) {
     List<String> imageList = [
-      'assets/images/victore_diary.jpg',
+      'assets/images/info diary img.jpg',
       'assets/images/habtis.jpg',
       'assets/images/All in one appp.jpg'
     ];
@@ -42,7 +40,7 @@ class _PageOneState extends State<PageOne> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 255, 255, 255),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -51,40 +49,43 @@ class _PageOneState extends State<PageOne> {
               style: TextStyle(
                   fontSize: 50,
                   fontFamily: Textfonts.Monoton,
-                  color: Colors.green),
+                  color: Colors.blue[300]),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(0),
-              child: Image.asset(
-                imageList[currentIndux],
-                height: 250,
-                width: 250,
+            Container(
+              height: 250,
+              width: 250,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(imageList[currentIndux]),
+                ),
+                borderRadius:
+                    BorderRadius.circular(20.0), // Set border radius to 60
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
               textList[currentIndux],
               style: TextStyle(
                 fontSize: 30,
-                color: Colors.green,
+                color: Colors.blue[300],
                 fontWeight: FontWeight.w500,
                 fontFamily: Textfonts.ConformityPersonalUseRegular,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
               textNoteList[currentIndux],
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
-                color: AppColors.modelColor1,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
               ),
             ).animate().fade(duration: 500.ms).scale(delay: 500.ms),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             Row(
@@ -102,12 +103,12 @@ class _PageOneState extends State<PageOne> {
                     decoration: BoxDecoration(
                       color: 0 == currentIndux
                           ? AppColors.modelColor1
-                          : AppColors.modelColor2,
+                          : Colors.blue[100],
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
@@ -122,12 +123,12 @@ class _PageOneState extends State<PageOne> {
                     decoration: BoxDecoration(
                       color: 1 == currentIndux
                           ? AppColors.modelColor1
-                          : AppColors.modelColor2,
+                          : Colors.blue[100],
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
@@ -142,14 +143,14 @@ class _PageOneState extends State<PageOne> {
                     decoration: BoxDecoration(
                       color: 2 == currentIndux
                           ? AppColors.modelColor1
-                          : AppColors.modelColor2,
+                          : Colors.blue[100],
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             currentIndux != 2
@@ -159,6 +160,14 @@ class _PageOneState extends State<PageOne> {
                       GestureDetector(
                         onTap: () => GotoLoginPage(context),
                         child: Container(
+                          height: 60,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            color: Colors.blue[100],
+                            borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30)),
+                          ),
                           child: Center(
                             child: Text(
                               'Skip',
@@ -169,14 +178,6 @@ class _PageOneState extends State<PageOne> {
                               ),
                             ),
                           ),
-                          height: 60,
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 204, 248, 206),
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30)),
-                          ),
                         ),
                       ),
                       GestureDetector(
@@ -186,6 +187,14 @@ class _PageOneState extends State<PageOne> {
                           });
                         },
                         child: Container(
+                          height: 60,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            color: AppColors.modelColor1,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30)),
+                          ),
                           child: Center(
                             child: Text(
                               'Next',
@@ -195,14 +204,6 @@ class _PageOneState extends State<PageOne> {
                                   fontSize: 20),
                             ),
                           ),
-                          height: 60,
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: AppColors.modelColor1,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30)),
-                          ),
                         ),
                       )
                     ],
@@ -210,6 +211,13 @@ class _PageOneState extends State<PageOne> {
                 : GestureDetector(
                     onTap: () => GotoLoginPage(context),
                     child: Container(
+                      height: 60,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: AppColors.modelColor1,
+                        borderRadius:
+                            const BorderRadius.all(Radius.elliptical(30, 30)),
+                      ),
                       child: Center(
                         child: Text(
                           "Let's Go",
@@ -218,13 +226,6 @@ class _PageOneState extends State<PageOne> {
                               color: Colors.white,
                               fontSize: 20),
                         ),
-                      ),
-                      height: 60,
-                      width: 180,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(30, 30)),
                       ),
                     ),
                   )
@@ -235,9 +236,10 @@ class _PageOneState extends State<PageOne> {
   }
 }
 
+// ignore: non_constant_identifier_names
 GotoLoginPage(ctx) {
   Navigator.of(ctx).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-    return LoginPage();
+    return const Sign_In();
     ////chane page route name/////
   }), (route) => false);
 }
